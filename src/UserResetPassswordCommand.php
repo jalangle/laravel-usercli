@@ -2,11 +2,9 @@
 
 namespace GHTNS\LaraUserCLI;
 
-use Illuminate\Console\Command;
-use App\User;
 use Hash;
 
-class UserResetPassswordCommand extends Command
+class UserResetPassswordCommand extends UserBaseCommand
 {
 	/**
 	 * The name and signature of the console command.
@@ -40,7 +38,7 @@ class UserResetPassswordCommand extends Command
 	public function handle()
 	{
 		$email = $this->ask('Enter an email');
-		$user = User::where("email", $email)->first();
+		$user = $this->userModel::where("email", $email)->first();
 		if (!$user)
 		{
 			$this->error("No user found with email $email");

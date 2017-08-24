@@ -2,11 +2,9 @@
 
 namespace GHTNS\LaraUserCLI;
 
-use Illuminate\Console\Command;
-use App\User;
 use Hash;
 
-class UserListCommand extends Command
+class UserListCommand extends UserBaseCommand
 {
 	/**
 	 * The name and signature of the console command.
@@ -39,8 +37,9 @@ class UserListCommand extends Command
 	 */
 	public function handle()
 	{
+
 		$this->line("ID\tNAME\tEMAIL");
-		foreach(User::all() as $user)
+		foreach($this->userModel::all() as $user)
 		{
 			$this->line("$user->id\t$user->name\t$user->email");
 		}

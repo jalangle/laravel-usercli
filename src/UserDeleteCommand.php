@@ -2,11 +2,9 @@
 
 namespace GHTNS\LaraUserCLI;
 
-use Illuminate\Console\Command;
-use App\User;
 use Hash;
 
-class UserDeleteCommand extends Command
+class UserDeleteCommand extends UserBaseCommand
 {
 	/**
 	 * The name and signature of the console command.
@@ -41,7 +39,7 @@ class UserDeleteCommand extends Command
 	{
 		$email = $this->ask('What user email would you like to remove?');
 
-		$result = User::where("email", $email)->delete();
+		$result = $this->userModel::where("email", $email)->delete();
 		if ($result == 0)
 		{
 			$this->error("No user found using $email");

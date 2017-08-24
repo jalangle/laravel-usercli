@@ -2,11 +2,9 @@
 
 namespace GHTNS\LaraUserCLI;
 
-use Illuminate\Console\Command;
-use App\User;
 use Hash;
 
-class UserAddCommand extends Command
+class UserAddCommand extends UserBaseCommand
 {
 	/**
 	 * The name and signature of the console command.
@@ -50,12 +48,10 @@ class UserAddCommand extends Command
 			return;
 		}
 
-		$user = new User();
+		$user = new $this->userModel();
 		$user->name = $name;
 		$user->password = Hash::make($pass1);
 		$user->email = $email;
 		$user->save();
-
-		$user->assign($role);
 	}
 }
