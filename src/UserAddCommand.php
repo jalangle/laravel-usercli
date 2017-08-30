@@ -53,5 +53,16 @@ class UserAddCommand extends UserBaseCommand
 		$user->password = Hash::make($pass1);
 		$user->email = $email;
 		$user->save();
+
+		$roles = Helpers::enumerateBouncerRoles();
+		if($roles->count() > 0)
+		{
+			$role = $this->choice('What role does this user have?', $roles->toArray());
+			if($role)
+			{
+				$user->assign($role);
+			}
+		}
 	}
 }
+

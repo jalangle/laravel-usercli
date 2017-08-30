@@ -37,11 +37,23 @@ class UserListCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
+		$header = "ID\tNAME\tEMAIL";
+		if(Helpers::isBouncerInstalled())
+		{
+			$header .= "\tROLES";
+		}
+		$this->line($header);
 
-		$this->line("ID\tNAME\tEMAIL");
 		foreach($this->userModel::all() as $user)
 		{
-			$this->line("$user->id\t$user->name\t$user->email");
+			$line = "$user->id\t$user->name\t$user->email";
+			if (Helpers::isBouncerInstalled())
+			{
+				$roles = $user->roles->implode('name', ',');
+				$line .= "\t$roles";
+			}
+
+			$this->line($line);
 		}
 	}
 }
