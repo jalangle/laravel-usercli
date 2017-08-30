@@ -1,9 +1,6 @@
 <?php
 
 namespace GHTNS\LaraUserCLI;
-
-use GHTNS\LaraUserCLI\UserAddCommand;
-
 use Illuminate\Support\ServiceProvider;
 
 class LaraUserServiceProvider extends ServiceProvider
