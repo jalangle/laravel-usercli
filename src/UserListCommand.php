@@ -37,23 +37,22 @@ class UserListCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
-		$header = "ID\tNAME\tEMAIL";
+		$headers = ['id', 'name', 'email'];
 		if(Helpers::isBouncerInstalled())
 		{
-			$header .= "\tROLES";
+			array_push($headers, 'roles');
 		}
-		$this->line($header);
 
-		foreach($this->userModel::all() as $user)
-		{
-			$line = "$user->id\t$user->name\t$user->email";
-			if (Helpers::isBouncerInstalled())
+		$users = $this->userModel::all();
+		$tabledata = $users->map(function ($item, $key) {
+			$data = [$item->id, $item->name, $item->email];
+			if(Helpers::isBouncerInstalled())
 			{
-				$roles = $user->roles->implode('name', ',');
-				$line .= "\t$roles";
+				array_push($data, $item->roles->implode('name', ','));
 			}
+			return $data;
+		});
 
-			$this->line($line);
-		}
+		$this->table($headers, $tabledata);
 	}
 }
