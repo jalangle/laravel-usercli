@@ -2,8 +2,6 @@
 
 namespace GHTNS\LaraUserCLI;
 
-use App\User;
-
 class UserModCommand extends UserBaseCommand
 {
 	/**
@@ -37,7 +35,7 @@ class UserModCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
-		$user = User::where('email', $this->argument('email'))->first();
+		$user = $this->userModel::where('email', $this->argument('email'))->first();
 		if(!$user)
 		{
 			$this->error("User " . $this->argument('email') . " not found");
