@@ -11,7 +11,7 @@ class UserDeleteCommand extends UserBaseCommand
 	 *
 	 * @var string
 	 */
-	protected $signature = 'user:delete';
+	protected $signature = 'user:delete {email}';
 
 	/**
 	 * The console command description.
@@ -37,7 +37,7 @@ class UserDeleteCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
-		$email = $this->ask('What user email would you like to remove?');
+		$email =  $this->argument('email');
 
 		$result = $this->userModel::where("email", $email)->delete();
 		if ($result == 0)
