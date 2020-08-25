@@ -11,7 +11,7 @@ class UserAddCommand extends UserBaseCommand
 	 *
 	 * @var string
 	 */
-	protected $signature = 'user:add';
+	protected $signature = 'user:add {email} {--name=} {--email=} {--group=} {--password=}';
 
 	/**
 	 * The console command description.
@@ -37,31 +37,30 @@ class UserAddCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
-		$name = $this->ask('What is your name');
-		$email = $this->ask('What is your email');
-
-		$pass1 = $this->secret('Enter a password');
-		$pass2 = $this->secret('Confirm your password');
-		if ($pass1 !== $pass2)
+		$email =  $this->argument('email');
+		$user = $this->userModel::where('email', $this->argument('email'))->first();
+		if($user)
 		{
-			$this->error("passwords don't match");
+			$this->error("User $email already exists");
 			return;
 		}
 
+		$name = $this->option('name') ?? "Anonymous User";
+		$group = $this->option('group') ?? "guest";
+		$pass1 = $this->option('password') ?? null;
+
 		$user = new $this->userModel();
-		$user->name = $name;
-		$user->password = Hash::make($pass1);
 		$user->email = $email;
+		$user->name = $name;
+		if($pass1)
+		{
+			$user->password = Hash::make($pass1);
+		}
 		$user->save();
 
-		$roles = Helpers::enumerateBouncerRoles();
-		if($roles->count() > 0)
+		if(Helpers::enumerateBouncerRoles()->contains($group))
 		{
-			$role = $this->choice('What role does this user have?', $roles->toArray());
-			if($role)
-			{
-				$user->assign($role);
-			}
+			$user->assign($group);
 		}
 	}
 }
