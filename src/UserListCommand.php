@@ -37,7 +37,7 @@ class UserListCommand extends UserBaseCommand
 	 */
 	public function handle()
 	{
-		$headers = ['id', 'name', 'email'];
+		$headers = ['id', 'name', 'email', 'has_password'];
 		if(Helpers::isBouncerInstalled())
 		{
 			array_push($headers, 'roles');
@@ -45,7 +45,7 @@ class UserListCommand extends UserBaseCommand
 
 		$users = $this->userModel::all();
 		$tabledata = $users->map(function ($item, $key) {
-			$data = [$item->id, $item->name, $item->email];
+			$data = [$item->id, $item->name, $item->email, ($item->password != null) ? 'YES' : 'NO'];
 			if(Helpers::isBouncerInstalled())
 			{
 				array_push($data, $item->roles->implode('name', ','));
