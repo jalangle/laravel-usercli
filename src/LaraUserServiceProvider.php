@@ -36,5 +36,14 @@ class LaraUserServiceProvider extends ServiceProvider
         $this->commands(UserListCommand::class);
         $this->commands(UserModCommand::class);
         $this->commands(UserResetPassswordCommand::class);
+
+        if(Helpers::isBouncerInstalled())
+        {
+            $this->commands(GroupAddCommand::class);
+            $this->commands(GroupDeleteCommand::class);
+            $this->commands(GroupListCommand::class);
+            $this->commands(GroupModCommand::class);
+
+        }
     }
 }
